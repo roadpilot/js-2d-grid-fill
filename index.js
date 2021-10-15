@@ -9,18 +9,49 @@ To perform a flood fill, consider the starting pixel, plus any pixels connected 
 Return the modified image after performing the flood fill.
 */
 
-var floodFill = function(image, sr, sc, newColor, startColor=image[sr][sc]) {
-    if (typeof image[sr] === 'undefined' || typeof image[0][sc] === 'undefined' || image[sr][sc] !== startColor || image[sr][sc] === newColor){
-        return image
-    }
+/**
+ * @param {number[][]} image
+ * @param {number} sr
+ * @param {number} sc
+ * @param {number} newColor
+ * @return {number[][]}
+ */
 
-    image[sr][sc]=newColor
-    floodFill(image, sr+1, sc, newColor, startColor)
-    floodFill(image, sr-1, sc, newColor, startColor)
-    floodFill(image, sr, sc+1, newColor, startColor)
-    floodFill(image, sr, sc-1, newColor, startColor)
-    return image
+var floodFill = function(image, sr, sc, newColor) {
+    if (!isIndexValid(image, sr, sc)) return image
+    let originalColor = image[sr][sc];
+    fill(image, sr, sc, newColor, originalColor);
+    return image;
 };
+
+function fill(image, sr, sc, newColor, originalColor) {
+    if (!isIndexValid(image, sr, sc) || image[sr][sc] === newColor || image[sr][sc] !== originalColor) return
+    
+    image[sr][sc] = newColor;
+    fill(image, sr + 1, sc, newColor, originalColor) // down
+    fill(image, sr - 1, sc, newColor, originalColor) // up
+    fill(image, sr, sc + 1, newColor, originalColor) // right
+    fill(image, sr, sc - 1, newColor, originalColor) // left
+}
+
+function isIndexValid(image, sr, sc) {
+    return (typeof image[sr] !== 'undefined' && typeof image[0][sc] !== 'undefined');
+}
+
+floodFill([[1,1,1],[1,1,0],[1,0,1]],1,1,2)
+
+// var floodFill = function(image, sr, sc, newColor, startColor=image[sr][sc]) {
+//     if (typeof image[sr] === 'undefined' || typeof image[0][sc] === 'undefined' || image[sr][sc] !== startColor || image[sr][sc] === newColor){
+//         return image
+//     }
+
+//     image[sr][sc]=newColor
+//     floodFill(image, sr+1, sc, newColor, startColor)
+//     floodFill(image, sr-1, sc, newColor, startColor)
+//     floodFill(image, sr, sc+1, newColor, startColor)
+//     floodFill(image, sr, sc-1, newColor, startColor)
+//     return image
+// };
 
 // var floodFill = function(image, sr, sc, newColor) {
 //     // sr = over
